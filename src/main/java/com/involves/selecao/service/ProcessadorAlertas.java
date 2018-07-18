@@ -8,11 +8,16 @@ import java.net.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import com.google.gson.Gson;
 import com.involves.selecao.alerta.Alerta;
 import com.involves.selecao.alerta.Pesquisa;
 import com.involves.selecao.alerta.Resposta;
 import com.involves.selecao.gateway.AlertaGateway;
+import com.involves.selecao.utils.Request;
+import com.involves.selecao.config.AlertaConfig;
 
 @Service
 public class ProcessadorAlertas {
@@ -75,6 +80,22 @@ public class ProcessadorAlertas {
 				}
 			} 
 		}
+	}
+
+	public void processa2() throws IOException {
+		ApplicationContext context = new AnnotationConfigApplicationContext(AlertaConfig.class);
+		Request request = new Request();
+		
+		Gson gson = new Gson();
+		String url = (String) context.getBean("url_pesquisas");
+		Pesquisa[] ps = gson.fromJson(request.get(url), Pesquisa[].class);
+
+		for (Pesquisa p : ps) {
+			for (Resposta r : p.getRespostas()) {				
+				System.out.println(r);
+			}
+		}
+		
 	}
 }
 

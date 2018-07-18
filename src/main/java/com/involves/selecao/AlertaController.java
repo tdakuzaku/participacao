@@ -35,4 +35,13 @@ public class AlertaController {
 			e.printStackTrace();
 		}
     }
+
+	@GetMapping("/participacoes")
+    public void participacoes() {
+		try {
+			processador.processa2();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 }
