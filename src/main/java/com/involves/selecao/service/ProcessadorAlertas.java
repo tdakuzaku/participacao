@@ -1,5 +1,6 @@
 package com.involves.selecao.service;
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -44,14 +45,24 @@ public class ProcessadorAlertas {
 					case "Qual o preço do produto?":
 						int precoColetado = Integer.parseInt(r.getResposta());
 						int precoEstipulado = Integer.parseInt(p.getPreco_estipulado());
-						int margem = precoEstipulado - Integer.parseInt(r.getResposta());
-						alerta.setMargem(margem);
+						int margemPreco = precoEstipulado - Integer.parseInt(r.getResposta());
+						alerta.setMargem(margemPreco);
 						if(precoColetado > precoEstipulado){
 						    alerta.setDescricao("Preço acima do estipulado!");
 						    alerta.setFlTipo(2);
-						} else if(precoColetado < precoEstipulado){
+						} else {
 						    alerta.setDescricao("Preço abaixo do estipulado!");
 						    alerta.setFlTipo(3);
+						}
+						gateway.salvar(alerta);
+						break;
+					case "%Share":
+						int participacaoEstipulada = Integer.parseInt(p.getParticipacao_estipulada());
+						int margemParticipacao = participacaoEstipulada - Integer.parseInt(r.getResposta());
+						if (margemParticipacao > 0) {
+							alerta.setDescricao("Participação superior ao estipulado");
+						} else {
+							alerta.setDescricao("Participação inferior ao estipulado");
 						}
 						gateway.salvar(alerta);
 						break;
@@ -60,7 +71,11 @@ public class ProcessadorAlertas {
 				}
 			}
 		}
-		
+	}
+	
+	public void lista() {
+		List<Alerta> lista = gateway.buscarTodos();
+		System.out.println(lista);
 	}
 }
 

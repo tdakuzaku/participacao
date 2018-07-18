@@ -36,12 +36,8 @@ public class AlertaController {
 		}
     }
 
-	@GetMapping("/participacoes")
+	@GetMapping("/lista")
     public void participacoes() {
-		try {
-			processador.processa2();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		processador.lista();
     }
 }

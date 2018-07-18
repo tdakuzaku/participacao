@@ -8,8 +8,15 @@ public class Pesquisa {
 	private String ponto_de_venda;
 	private String produto;
 	private String preco_estipulado;
+	private String participacao_estipulada;
 	private List<Resposta> respostas;
 	
+	public String getParticipacao_estipulada() {
+		return participacao_estipulada;
+	}
+	public void setParticipacao_estipulada(String participacao_estipulada) {
+		this.participacao_estipulada = participacao_estipulada;
+	}
 	public int getId() {
 		return id;
 	}
