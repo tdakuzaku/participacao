@@ -22,7 +22,7 @@ public class AlertaController {
 	@Autowired
 	private ProcessadorAlertas processador;
 	
-	@GetMapping
+	@GetMapping("/alertas")
     public List<Alerta> alertas() {
 		return buscaAlertasService.buscarTodos();
     }
@@ -34,10 +34,5 @@ public class AlertaController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    }
-
-	@GetMapping("/lista")
-    public void participacoes() {
-		processador.lista();
     }
 }

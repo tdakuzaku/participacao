@@ -7,10 +7,17 @@ public class Pesquisa {
 	private String notificante;
 	private String ponto_de_venda;
 	private String produto;
+	private String categoria;
 	private String preco_estipulado;
 	private String participacao_estipulada;
 	private List<Resposta> respostas;
 	
+	public String getCategoria() {
+		return categoria;
+	}
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
 	public String getParticipacao_estipulada() {
 		return participacao_estipulada;
 	}

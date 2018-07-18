@@ -59,9 +59,13 @@ public class ProcessadorAlertas {
 					case "%Share":
 						int participacaoEstipulada = Integer.parseInt(p.getParticipacao_estipulada());
 						int margemParticipacao = participacaoEstipulada - Integer.parseInt(r.getResposta());
+						alerta.setCategoria(p.getCategoria());
+						alerta.setMargem(margemParticipacao);
 						if (margemParticipacao > 0) {
+							alerta.setFlTipo(4);
 							alerta.setDescricao("Participação superior ao estipulado");
 						} else {
+							alerta.setFlTipo(5);
 							alerta.setDescricao("Participação inferior ao estipulado");
 						}
 						gateway.salvar(alerta);
