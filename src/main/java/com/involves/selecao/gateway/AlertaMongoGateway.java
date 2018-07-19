@@ -1,6 +1,10 @@
 package com.involves.selecao.gateway;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.bson.Document;
@@ -23,6 +27,11 @@ public class AlertaMongoGateway implements AlertaGateway{
 
 	@Override
 	public void salvar(Alerta alerta) {
+		
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		Date today = Calendar.getInstance().getTime();        
+		String data = df.format(today);	
+		
 		MongoDatabase database = mongoFactory.getDb();
 		MongoCollection<Document> collection = database.getCollection("Alertas");
 		Document doc = new Document("ponto_de_venda", alerta.getPontoDeVenda())
@@ -30,7 +39,8 @@ public class AlertaMongoGateway implements AlertaGateway{
                 .append("tipo", alerta.getFlTipo())
                 .append("margem", alerta.getMargem())
                 .append("categoria", alerta.getCategoria())
-                .append("produto", alerta.getProduto());
+                .append("produto", alerta.getProduto())
+				.append("data", data);
 		collection.insertOne(doc);
 	}
 
@@ -48,6 +58,7 @@ public class AlertaMongoGateway implements AlertaGateway{
 			alerta.setPontoDeVenda(document.getString("ponto_de_venda"));
 			alerta.setCategoria(document.getString("categoria"));
 			alerta.setProduto(document.getString("produto"));
+			alerta.setData(document.getString("data"));
 			alertas.add(alerta);
 		}
 		return alertas;
@@ -76,6 +87,7 @@ public class AlertaMongoGateway implements AlertaGateway{
 			alerta.setPontoDeVenda(document.getString("ponto_de_venda"));
 			alerta.setCategoria(document.getString("categoria"));
 			alerta.setProduto(document.getString("produto"));
+			alerta.setData(document.getString("data"));
 			alertas.add(alerta);
 		}
 		return alertas;

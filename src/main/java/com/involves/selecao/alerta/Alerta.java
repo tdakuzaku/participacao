@@ -8,7 +8,14 @@ public class Alerta {
 	private String categoria;
 	private Integer flTipo;
 	private Integer margem;
+	private String data;
 	
+	public String getData() {
+		return data;
+	}
+	public void setData(String data) {
+		this.data = data;
+	}
 	public String getCategoria() {
 		return categoria;
 	}

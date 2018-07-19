@@ -33,9 +33,10 @@
                     <div class="col-6 col-md-6 col-lg-3" v-for="(alerta, index) in alertas">
                         <div :class="{ 'card': true, 'border-danger': [1,2,5].includes(alerta.flTipo)}">
                             <div :class="{ 'card-header': true, 'bg-primary': true, 'text-white': true, 'bg-danger': [1,2,5].includes(alerta.flTipo)}" v-html="alerta.descricao"></div>
-                            <img class="card-img-top" src="https://picsum.photos/50/25?image=56&blur">
+                            <img class="card-img-top" src="https://picsum.photos/150/100?image=56&blur">
                             <div class="card-body">
                                 <h5 class="card-title" v-html="alerta.pontoDeVenda"></h5>
+                                <p class="card-text" v-if="alerta.data" v-text="alerta.data"></p>
                                 <p class="card-text" v-if="alerta.produto" v-text="alerta.produto"></p>
                                 <p class="card-text btn btn-outline-secondary" v-if="alerta.categoria" v-text="alerta.categoria"></p>
                                 <section v-if="[2,3,4,5].includes(alerta.flTipo)">
