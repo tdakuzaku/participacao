@@ -36,14 +36,12 @@ var app = new Vue({
         .then((response) => {
           this.pontosDeVendas = response.body.sort();
         });
+    },
+    filtrarAlertas: function () {
+      this.$http.get('http://localhost:8080/alertas/buscar', { params: this.filtros })
+        .then((response) => {
+          this.alertas = response.body.sort();
+        });
     }
-  },
-  computed: {
-    // list() {
-    //   if (!this.filtros.tipo && !this.filtros.pontoDeVenda) {
-    //     return this.alertas;
-    //   }
-    //   return _.filter(this.alertas, alerta => alerta.tipo.indexOf(this.filtro.tipo) >= 0);
-    // }
-  },
+  }
 })

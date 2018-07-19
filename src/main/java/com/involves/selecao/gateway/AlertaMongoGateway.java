@@ -3,15 +3,13 @@ package com.involves.selecao.gateway;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mongodb.client.model.Sorts.*;
-
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.involves.selecao.alerta.Alerta;
 import com.involves.selecao.gateway.mongo.MongoDbFactory;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -56,10 +54,37 @@ public class AlertaMongoGateway implements AlertaGateway{
 	}
 	
 	@Override
+	public List<Alerta> buscar(String tipo, String pontoDeVenda) {
+		
+		BasicDBObject query = new BasicDBObject();
+		if (tipo != "") {
+			query.put("tipo", Integer.parseInt(tipo));	
+		}
+		if(pontoDeVenda != "") {
+			query.put("ponto_de_venda", pontoDeVenda);			
+		}
+		
+		MongoDatabase database = mongoFactory.getDb();
+		MongoCollection<Document> collection = database.getCollection("Alertas");
+		FindIterable<Document> db = collection.find(query);
+		List<Alerta> alertas = new ArrayList<>();
+		for (Document document : db) {
+			Alerta alerta = new Alerta();
+			alerta.setDescricao(document.getString("descricao"));
+			alerta.setFlTipo(document.getInteger("tipo"));
+			alerta.setMargem(document.getInteger("margem"));
+			alerta.setPontoDeVenda(document.getString("ponto_de_venda"));
+			alerta.setCategoria(document.getString("categoria"));
+			alerta.setProduto(document.getString("produto"));
+			alertas.add(alerta);
+		}
+		return alertas;
+	}
+	
+	@Override
 	public List<Integer> listaTipos() {
 		MongoDatabase database = mongoFactory.getDb();
 		MongoCollection<Document> collection = database.getCollection("Alertas");
-		Bson sort = descending("empLevel");
 		MongoCursor<Integer> db = collection.distinct("tipo", Integer.class).iterator();
 		
 		List<Integer> tipos = new ArrayList<>();

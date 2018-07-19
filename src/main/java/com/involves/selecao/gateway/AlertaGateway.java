@@ -13,4 +13,6 @@ public interface AlertaGateway {
 	List<Integer> listaTipos();
 	
 	List<String> listaPontosDeVendas();
+
+	List<Alerta> buscar(String tipo, String pontoDeVenda);
 }

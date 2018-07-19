@@ -9,7 +9,7 @@
     <body>
         <div class="container">
             <div id="app">
-                <form class="form-inline">
+                <form class="form-inline" v-on:submit.prevent="filtrarAlertas">
                     <div class="row" id="filter">
                         <div class="col">
                             <select class="form-control" v-model="filtros.tipo">
