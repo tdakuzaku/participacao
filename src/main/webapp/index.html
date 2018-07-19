@@ -8,20 +8,27 @@
     </head>
     <body>
         <div class="container">
-            <div id="filter">
+            <div id="app">
                 <form class="form-inline">
-                    <div class="form-group">
-                        <label>Filtros:</label>
-                        <select class="form-control" v-model="">
-                            <option value="name">Angel One</option>
-                        </select>
-                        <select class="form-control" v-model="">
-                            <option value="name">Tipo</option>
-                        </select>
+                    <div class="row" id="filter">
+                        <div class="col">
+                            <select class="form-control" v-model="filtros.tipo">
+                                <option value="">Tipo</option>
+                                <option v-for="tipo in tipos">{{ tipo }}</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <select class="form-control" v-model="filtros.pontoDeVenda">
+                                <option value="">Ponto de venda</option>
+                                <option v-for="pdv in pontosDeVendas">{{ pdv }}</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary">Filtrar</button>
+                        </div>
                     </div>
                 </form>
-            </div>
-            <div id="app">
+
                 <div class="row" v-if="ready">
                     <div class="col-6 col-md-6 col-lg-3" v-for="(alerta, index) in alertas">
                         <div :class="{ 'card': true, 'border-danger': [1,2,5].includes(alerta.flTipo)}">

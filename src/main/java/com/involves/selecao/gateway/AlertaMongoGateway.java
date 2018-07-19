@@ -3,7 +3,10 @@ package com.involves.selecao.gateway;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mongodb.client.model.Sorts.*;
+
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -56,7 +59,9 @@ public class AlertaMongoGateway implements AlertaGateway{
 	public List<Integer> listaTipos() {
 		MongoDatabase database = mongoFactory.getDb();
 		MongoCollection<Document> collection = database.getCollection("Alertas");
+		Bson sort = descending("empLevel");
 		MongoCursor<Integer> db = collection.distinct("tipo", Integer.class).iterator();
+		
 		List<Integer> tipos = new ArrayList<>();
 	    while(db.hasNext()) {
 			tipos.add(db.next());
