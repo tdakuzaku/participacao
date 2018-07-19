@@ -1,6 +1,5 @@
 package com.involves.selecao.service;
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -48,7 +47,7 @@ public class ProcessadorAlertas {
 		}
 	}
 	
-	private void alertaSitucaoProduto(Pesquisa p, Resposta r) {
+	protected Alerta alertaSitucaoProduto(Pesquisa p, Resposta r) {
 		Alerta a = new Alerta();
 		a.setPontoDeVenda(p.getPonto_de_venda());
 	    a.setProduto(p.getProduto());
@@ -57,9 +56,10 @@ public class ProcessadorAlertas {
 		    a.setFlTipo(1);
 		    gateway.salvar(a);
 		}
+		return a;
 	}
 	
-	private void alertaPrecoProduto(Pesquisa p, Resposta r) {
+	protected Alerta alertaPrecoProduto(Pesquisa p, Resposta r) {
 		Alerta a = new Alerta();
 		a.setPontoDeVenda(p.getPonto_de_venda());
 	    a.setProduto(p.getProduto());
@@ -78,20 +78,21 @@ public class ProcessadorAlertas {
 		    a.setFlTipo(3);
 		}
 		gateway.salvar(a);
+		return a;
 	}
 	
-	private void alertaParticipacaoProduto(Pesquisa p, Resposta r) {
+	protected Alerta alertaParticipacaoProduto(Pesquisa p, Resposta r) {
 		Alerta a = new Alerta();
 		a.setPontoDeVenda(p.getPonto_de_venda());
 	    a.setProduto(p.getProduto());
 	    
 		int participacaoEstipulada = Integer.parseInt(p.getParticipacao_estipulada());
-		int margemParticipacao = participacaoEstipulada - Integer.parseInt(r.getResposta());
+		int margemParticipacao = Integer.parseInt(r.getResposta()) - participacaoEstipulada;
 		
 		a.setCategoria(p.getCategoria());
 		a.setMargem(margemParticipacao);
-		
-		if (margemParticipacao > 0) {
+
+		if (margemParticipacao >= 0) {
 			a.setFlTipo(4);
 			a.setDescricao("Participação superior ao estipulado");
 		} else {
@@ -99,6 +100,7 @@ public class ProcessadorAlertas {
 			a.setDescricao("Participação inferior ao estipulado");
 		}
 		gateway.salvar(a);
+		return a;
 	}
 }
 
