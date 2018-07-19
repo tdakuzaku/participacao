@@ -22,53 +22,24 @@ public class ProcessadorAlertas {
 	private AlertaGateway gateway;
 	
 	public void processa() throws IOException {
-		ApplicationContext context = new AnnotationConfigApplicationContext(AlertaConfig.class);
+		ApplicationContext contexto = new AnnotationConfigApplicationContext(AlertaConfig.class);
 		Request request = new Request();
 		
 		Gson gson = new Gson();
-		String url = (String) context.getBean("url_pesquisas");
-		Pesquisa[] ps = gson.fromJson(request.get(url), Pesquisa[].class);
+		String urlPesquisas = (String) contexto.getBean("url_pesquisas");
+		Pesquisa[] pesquisas = gson.fromJson(request.get(urlPesquisas), Pesquisa[].class);
 
-		for (Pesquisa p : ps) {
-			for (Resposta r : p.getRespostas()) {
-				Alerta alerta = new Alerta();
-				alerta.setPontoDeVenda(p.getPonto_de_venda());
-			    alerta.setProduto(p.getProduto());
-				switch (r.getPergunta()) {
+		for (Pesquisa pesquisa : pesquisas) {
+			for (Resposta resposta : pesquisa.getRespostas()) {
+				switch (resposta.getPergunta()) {
 					case "Qual a situação do produto?":
-						if(r.getResposta().equals("Produto ausente na gondola")){
-						    alerta.setDescricao("Ruptura detectada!");
-						    alerta.setFlTipo(1);
-						    gateway.salvar(alerta);
-						}
+						this.alertaSitucaoProduto(pesquisa, resposta);
 						break;
 					case "Qual o preço do produto?":
-						int precoColetado = Integer.parseInt(r.getResposta());
-						int precoEstipulado = Integer.parseInt(p.getPreco_estipulado());
-						int margemPreco = precoEstipulado - Integer.parseInt(r.getResposta());
-						alerta.setMargem(margemPreco);
-						if(precoColetado > precoEstipulado){
-						    alerta.setDescricao("Preço acima do estipulado!");
-						    alerta.setFlTipo(2);
-						} else {
-						    alerta.setDescricao("Preço abaixo do estipulado!");
-						    alerta.setFlTipo(3);
-						}
-						gateway.salvar(alerta);
+						this.alertaPrecoProduto(pesquisa, resposta);
 						break;
 					case "%Share":
-						int participacaoEstipulada = Integer.parseInt(p.getParticipacao_estipulada());
-						int margemParticipacao = participacaoEstipulada - Integer.parseInt(r.getResposta());
-						alerta.setCategoria(p.getCategoria());
-						alerta.setMargem(margemParticipacao);
-						if (margemParticipacao > 0) {
-							alerta.setFlTipo(4);
-							alerta.setDescricao("Participação superior ao estipulado");
-						} else {
-							alerta.setFlTipo(5);
-							alerta.setDescricao("Participação inferior ao estipulado");
-						}
-						gateway.salvar(alerta);
+						this.alertaParticipacaoProduto(pesquisa, resposta);
 						break;
 					default:
 						System.out.println("Alerta ainda não implementado!");
@@ -77,9 +48,57 @@ public class ProcessadorAlertas {
 		}
 	}
 	
-	public void lista() {
-		List<Alerta> lista = gateway.buscarTodos();
-		System.out.println(lista);
+	private void alertaSitucaoProduto(Pesquisa p, Resposta r) {
+		Alerta a = new Alerta();
+		a.setPontoDeVenda(p.getPonto_de_venda());
+	    a.setProduto(p.getProduto());
+		if(r.getResposta().equals("Produto ausente na gondola")){
+		    a.setDescricao("Ruptura detectada!");
+		    a.setFlTipo(1);
+		    gateway.salvar(a);
+		}
+	}
+	
+	private void alertaPrecoProduto(Pesquisa p, Resposta r) {
+		Alerta a = new Alerta();
+		a.setPontoDeVenda(p.getPonto_de_venda());
+	    a.setProduto(p.getProduto());
+	    
+		int precoColetado = Integer.parseInt(r.getResposta());
+		int precoEstipulado = Integer.parseInt(p.getPreco_estipulado());
+		int margemPreco = precoEstipulado - Integer.parseInt(r.getResposta());
+		
+		a.setMargem(margemPreco);
+		
+		if(precoColetado > precoEstipulado){
+		    a.setDescricao("Preço acima do estipulado!");
+		    a.setFlTipo(2);
+		} else {
+		    a.setDescricao("Preço abaixo do estipulado!");
+		    a.setFlTipo(3);
+		}
+		gateway.salvar(a);
+	}
+	
+	private void alertaParticipacaoProduto(Pesquisa p, Resposta r) {
+		Alerta a = new Alerta();
+		a.setPontoDeVenda(p.getPonto_de_venda());
+	    a.setProduto(p.getProduto());
+	    
+		int participacaoEstipulada = Integer.parseInt(p.getParticipacao_estipulada());
+		int margemParticipacao = participacaoEstipulada - Integer.parseInt(r.getResposta());
+		
+		a.setCategoria(p.getCategoria());
+		a.setMargem(margemParticipacao);
+		
+		if (margemParticipacao > 0) {
+			a.setFlTipo(4);
+			a.setDescricao("Participação superior ao estipulado");
+		} else {
+			a.setFlTipo(5);
+			a.setDescricao("Participação inferior ao estipulado");
+		}
+		gateway.salvar(a);
 	}
 }
 
