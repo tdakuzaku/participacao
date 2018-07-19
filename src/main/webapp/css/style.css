@@ -1,0 +1,23 @@
+.card {
+  margin-bottom: 30px;
+}
+
+.card-header {
+  font-size: 0.8rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-img-top {
+  border-radius: 0;
+}
+
+.card-body {
+  min-height: 110px;
+}
+
+.btn {
+  font-size: 0.8rem;
+}

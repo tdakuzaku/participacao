@@ -3,17 +3,18 @@ Vue.http.headers.common['Access-Control-Allow-Origin'] = '*';
 var app = new Vue({
   el: '#app',
   data: {
-    alerts: []
+    ready: false,
+    alertas: []
   },
   created: function () {
-    this.getAlerts()
+    this.getAlertas()
   },
   methods: {
-    getAlerts: function () {
+    getAlertas: function () {
       this.$http.get('http://localhost:8080/alertas/alertas')
         .then((response) => {
-          console.log(response)
-          // this.alerts = response.data.message;
+          this.alertas = response.body;
+          this.ready = true;
         });
     }
   }
