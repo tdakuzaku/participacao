@@ -4,7 +4,11 @@ var app = new Vue({
   el: '#app',
   data: {
     ready: false,
-    alertas: []
+    alertas: [],
+    filtros: {
+      tipo: null,
+      pontoDeVenda: null
+    }
   },
   created: function () {
     this.getAlertas()
@@ -17,5 +21,13 @@ var app = new Vue({
           this.ready = true;
         });
     }
-  }
+  },
+  computed: {
+    list() {
+      if (!this.filtros.tipo && !this.filtros.pontoDeVenda) {
+        return this.alertas;
+      }
+      return _.filter(this.alertas, alerta => alerta.tipo.indexOf(this.filtro.tipo) >= 0);
+    }
+  },
 })

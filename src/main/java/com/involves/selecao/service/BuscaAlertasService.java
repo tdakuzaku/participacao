@@ -18,4 +18,11 @@ public class BuscaAlertasService {
 		return gateway.buscarTodos();
 	}
 
+	public List<Integer> listaTipos() {
+		return gateway.listaTipos();
+	}
+	
+	public List<String> listaPontosDeVendas() {
+		return gateway.listaPontosDeVendas();
+	}
 }

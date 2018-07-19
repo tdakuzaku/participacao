@@ -1,9 +1,13 @@
+.container {
+  margin-top: 15px;
+}
+
 .card {
   margin-bottom: 30px;
+  font-size: 0.8rem;
 }
 
 .card-header {
-  font-size: 0.8rem;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;

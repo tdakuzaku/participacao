@@ -11,6 +11,7 @@ import com.involves.selecao.alerta.Alerta;
 import com.involves.selecao.gateway.mongo.MongoDbFactory;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
 @Component
@@ -49,5 +50,29 @@ public class AlertaMongoGateway implements AlertaGateway{
 			alertas.add(alerta);
 		}
 		return alertas;
+	}
+	
+	@Override
+	public List<Integer> listaTipos() {
+		MongoDatabase database = mongoFactory.getDb();
+		MongoCollection<Document> collection = database.getCollection("Alertas");
+		MongoCursor<Integer> db = collection.distinct("tipo", Integer.class).iterator();
+		List<Integer> tipos = new ArrayList<>();
+	    while(db.hasNext()) {
+			tipos.add(db.next());
+		}
+		return tipos;
+	}
+	
+	@Override
+	public List<String> listaPontosDeVendas() {
+		MongoDatabase database = mongoFactory.getDb();
+		MongoCollection<Document> collection = database.getCollection("Alertas");
+		MongoCursor<String> db = collection.distinct("ponto_de_venda", String.class).iterator();
+		List<String> pdvs = new ArrayList<>();
+	    while(db.hasNext()) {
+	    		pdvs.add(db.next());
+		}
+		return pdvs;
 	}
 }
